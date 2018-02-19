@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using HTML for game UI</title>
+    <style>
+        /* CSS tweaks for more consistent Progress bar rendering */
+
+        progress[value] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            border: none;
+
+            width: 250px;
+            height: 20px;
+
+            color: blue;
+        }
+
+        h1 {
+            font-family: Arial, Helvetica, sans-serif;
+            width: 150px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        select {
+            background-color: rgba(241, 15, 15, 0.5);
+        }
+
+        #demoSVG {
+            border: 1px solid black;
+            display: block;
+        }
+
+        .centerMe {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gameStats {
+            width: 800px;
+        }
+
+        .gameStats #healthBarLabel {
+            padding-left: 400px;
+        }
+
+        .gameStats #healthBar {
+            background-color: red;
+            color: white;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", init, false);
+
+        function init() {
+            document.getElementById("colorDropDown")
+                .addEventListener("change", changeCanvasColor, false);
+
+            document.getElementById("target")
+                .addEventListener("click", targetClick, false);
+        }
+
+        function changeCanvasColor(e) {
+            var index = e.currentTarget.selectedIndex;
+            document.getElementById("demoCanvas").style.backgroundColor =
+                e.currentTarget.children[index].value;
+        }
+
+        function targetClick(e) {
+            var scoreSpan = document.getElementById("gameScore");
+            var healthBar = document.getElementById("healthBar");
+            var currentScore = parseInt(scoreSpan.innerHTML.split(": ")[1], 10);
+
+            currentScore += 1;
+
+            healthBar.value += 1;
+            if (healthBar.value === 10) {
+                alert("You died!");
+                healthBar.value = 0;
+                currentScore = 0;
+            }
+
+            scoreSpan.innerHTML = "Score: " + currentScore;
+        }
+    </script>
+</head>
+
+<body>
+    <h1 class="centerMe">Demo</h1>
+    <div class="centerMe" style="width: 300px;">
+        <select id="colorDropDown">
+            <option value="">Choose a background color...</option>
+            <option value="red">Red</option>
+            <option value="green">Grenn</option>
+            <option value="blue">Blue</option>
+        </select>
+    </div>
+    <div class="centerMe gameStats">
+        <span id="gameScore">Score: 0</span>
+        <span id="healthBarLabel">Health:</span>
+        <progress id="healthBar" value="0" max="10"></progress>
+    </div>
+    <svg id="demoSVG" width="800" height="480">
+        <circle id="target" r="25" cx="50" cy="50" />
+    </svg>
+</body>
+
+</html>
